@@ -141,6 +141,7 @@ export default defineComponent({
     };
     const onRangeChanged = (newRange: any) => {
       range.value = newRange;
+      emit('range-change', range);
     };
     const installVirtual = () => {
       virtual = new Virtual(
