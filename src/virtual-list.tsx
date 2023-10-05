@@ -239,6 +239,14 @@ export default defineComponent({
       emit('resized', id, size);
     };
 
+    const virtualSaveSize = (id: string, size: number) => {
+      virtual.saveSize(id, size);
+    };
+
+    const virtualGetOffset = (index: number) => {
+      return virtual.getOffset(index);
+    };
+
     // event called when slot mounted or size changed
     const onSlotResized = (type: SLOT_TYPE, size: number, hasInit: boolean) => {
       if (type === SLOT_TYPE.HEADER) {
@@ -336,6 +344,10 @@ export default defineComponent({
       getClientSize,
       scrollToOffset,
       scrollToIndex,
+      virtualSaveSize,
+      virtualGetOffset,
+      onScroll,
+      updatePageModeFront,
     });
 
     return () => {
