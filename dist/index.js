@@ -12,7 +12,6 @@ import {
   onUpdated,
   onUnmounted,
   watch,
-  onBeforeMount,
   onActivated,
 } from 'vue';
 
@@ -1101,9 +1100,7 @@ var VirtualList = defineComponent({
      * life cycles
      */
 
-    onBeforeMount(function () {
-      installVirtual();
-    }); // set back offset when awake from keep-alive
+    installVirtual(); // set back offset when awake from keep-alive
 
     onActivated(function () {
       scrollToOffset(virtual.offset);

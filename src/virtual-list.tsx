@@ -301,9 +301,7 @@ export default defineComponent({
     /**
      * life cycles
      */
-    onBeforeMount(() => {
-      installVirtual();
-    });
+    installVirtual();
 
     // set back offset when awake from keep-alive
     onActivated(() => {
