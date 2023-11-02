@@ -1,5 +1,5 @@
 /**
- * vue3-virtual-scroll-list v0.2.1
+ * vue3-virtual-scroll-list v0.2.2-fiksu.1
  * open source under the MIT license
  * https://github.com/reactjser/vue3-virtual-scroll-list#readme
  */
