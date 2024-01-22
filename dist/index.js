@@ -1,5 +1,5 @@
 /**
- * vue3-virtual-scroll-list v0.2.2-fiksu.1
+ * vue3-virtual-scroll-list v0.2.2-fiksu.2
  * open source under the MIT license
  * https://github.com/reactjser/vue3-virtual-scroll-list#readme
  */
@@ -15,71 +15,71 @@ import {
   onActivated,
 } from 'vue';
 
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
+function ownKeys(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-
-    if (enumerableOnly) {
-      symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    }
-
-    keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r &&
+      (o = o.filter(function (r) {
+        return Object.getOwnPropertyDescriptor(e, r).enumerable;
+      })),
+      t.push.apply(t, o);
   }
-
-  return keys;
+  return t;
 }
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(
-          target,
-          key,
-          Object.getOwnPropertyDescriptor(source, key),
-        );
-      });
-    }
+function _objectSpread2(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2
+      ? ownKeys(Object(t), !0).forEach(function (r) {
+          _defineProperty(e, r, t[r]);
+        })
+      : Object.getOwnPropertyDescriptors
+      ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+      : ownKeys(Object(t)).forEach(function (r) {
+          Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+        });
   }
-
-  return target;
+  return e;
 }
-
+function _toPrimitive(t, r) {
+  if ('object' != typeof t || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || 'default');
+    if ('object' != typeof i) return i;
+    throw new TypeError('@@toPrimitive must return a primitive value.');
+  }
+  return ('string' === r ? String : Number)(t);
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, 'string');
+  return 'symbol' == typeof i ? i : String(i);
+}
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError('Cannot call a class as a function');
   }
 }
-
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ('value' in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
   }
 }
-
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, 'prototype', {
+    writable: false,
+  });
   return Constructor;
 }
-
 function _defineProperty(obj, key, value) {
+  key = _toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -90,10 +90,8 @@ function _defineProperty(obj, key, value) {
   } else {
     obj[key] = value;
   }
-
   return obj;
 }
-
 function _toConsumableArray(arr) {
   return (
     _arrayWithoutHoles(arr) ||
@@ -102,11 +100,9 @@ function _toConsumableArray(arr) {
     _nonIterableSpread()
   );
 }
-
 function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
-
 function _iterableToArray(iter) {
   if (
     (typeof Symbol !== 'undefined' && iter[Symbol.iterator] != null) ||
@@ -114,7 +110,6 @@ function _iterableToArray(iter) {
   )
     return Array.from(iter);
 }
-
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === 'string') return _arrayLikeToArray(o, minLen);
@@ -124,15 +119,11 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === 'Arguments' || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
     return _arrayLikeToArray(o, minLen);
 }
-
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-
   for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
   return arr2;
 }
-
 function _nonIterableSpread() {
   throw new TypeError(
     'Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.',
@@ -142,6 +133,7 @@ function _nonIterableSpread() {
 /**
  * virtual list core calculating center
  */
+
 var DIRECTION_TYPE = {
   FRONT: 'FRONT',
   // scroll up or left
@@ -153,37 +145,38 @@ var CALC_TYPE = {
   DYNAMIC: 'DYNAMIC',
 };
 var LEADING_BUFFER = 2;
-
 var Virtual = /*#__PURE__*/ (function () {
   function Virtual(param, callUpdate) {
     _classCallCheck(this, Virtual);
-
     this.init(param, callUpdate);
   }
-
   _createClass(Virtual, [
     {
       key: 'init',
       value: function init(param, callUpdate) {
         // param data
         this.param = param;
-        this.callUpdate = callUpdate; // size data
+        this.callUpdate = callUpdate;
 
+        // size data
         this.sizes = new Map();
         this.firstRangeTotalSize = 0;
         this.firstRangeAverageSize = 0;
         this.lastCalcIndex = 0;
         this.fixedSizeValue = 0;
-        this.calcType = CALC_TYPE.INIT; // scroll data
+        this.calcType = CALC_TYPE.INIT;
 
+        // scroll data
         this.offset = 0;
-        this.direction = ''; // range data
+        this.direction = '';
 
+        // range data
         this.range = Object.create(null);
-
         if (param) {
           this.checkRange(0, param.keeps - 1);
-        } // benchmark test data
+        }
+
+        // benchmark test data
         // this.__bsearchCalls = 0
         // this.__getIndexOffsetCalls = 0
       },
@@ -192,7 +185,9 @@ var Virtual = /*#__PURE__*/ (function () {
       key: 'destroy',
       value: function destroy() {
         this.init(null, null);
-      }, // return current render range
+      },
+
+      // return current render range
     },
     {
       key: 'getRange',
@@ -215,7 +210,9 @@ var Virtual = /*#__PURE__*/ (function () {
       key: 'isFront',
       value: function isFront() {
         return this.direction === DIRECTION_TYPE.FRONT;
-      }, // return start index offset
+      },
+
+      // return start index offset
     },
     {
       key: 'getOffset',
@@ -230,7 +227,6 @@ var Virtual = /*#__PURE__*/ (function () {
       key: 'updateParam',
       value: function updateParam(key, value) {
         var _this = this;
-
         if (this.param && key in this.param) {
           // if uniqueIds change, find out deleted id and remove from size map
           if (key === 'uniqueIds') {
@@ -240,18 +236,20 @@ var Virtual = /*#__PURE__*/ (function () {
               }
             });
           }
-
           this.param[key] = value;
         }
-      }, // save each size map by id
+      },
+
+      // save each size map by id
     },
     {
       key: 'saveSize',
       value: function saveSize(id, size) {
-        this.sizes.set(id, size); // we assume size type is fixed at the beginning and remember first size value
+        this.sizes.set(id, size);
+
+        // we assume size type is fixed at the beginning and remember first size value
         // if there is no size value different from this at next comming saving
         // we think it's a fixed size list, otherwise is dynamic size list
-
         if (this.calcType === CALC_TYPE.INIT) {
           this.fixedSizeValue = size;
           this.calcType = CALC_TYPE.FIXED;
@@ -259,11 +257,12 @@ var Virtual = /*#__PURE__*/ (function () {
           this.calcType === CALC_TYPE.FIXED &&
           this.fixedSizeValue !== size
         ) {
-          this.calcType = CALC_TYPE.DYNAMIC; // it's no use at all
-
+          this.calcType = CALC_TYPE.DYNAMIC;
+          // it's no use at all
           delete this.fixedSizeValue;
-        } // calculate the average size only in the first range
+        }
 
+        // calculate the average size only in the first range
         if (
           this.calcType !== CALC_TYPE.FIXED &&
           typeof this.firstRangeTotalSize !== 'undefined'
@@ -285,29 +284,33 @@ var Virtual = /*#__PURE__*/ (function () {
             delete this.firstRangeTotalSize;
           }
         }
-      }, // in some special situation (e.g. length change) we need to update in a row
+      },
+
+      // in some special situation (e.g. length change) we need to update in a row
       // try goiong to render next range by a leading buffer according to current direction
     },
     {
       key: 'handleDataSourcesChange',
       value: function handleDataSourcesChange() {
         var start = this.range.start;
-
         if (this.isFront()) {
           start = start - LEADING_BUFFER;
         } else if (this.isBehind()) {
           start = start + LEADING_BUFFER;
         }
-
         start = Math.max(start, 0);
         this.updateRange(this.range.start, this.getEndByStart(start));
-      }, // when slot size change, we also need force update
+      },
+
+      // when slot size change, we also need force update
     },
     {
       key: 'handleSlotSizeChange',
       value: function handleSlotSizeChange() {
         this.handleDataSourcesChange();
-      }, // calculating range on scroll
+      },
+
+      // calculating range on scroll
     },
     {
       key: 'handleScroll',
@@ -315,27 +318,28 @@ var Virtual = /*#__PURE__*/ (function () {
         this.direction =
           offset < this.offset ? DIRECTION_TYPE.FRONT : DIRECTION_TYPE.BEHIND;
         this.offset = offset;
-
         if (!this.param) {
           return;
         }
-
         if (this.direction === DIRECTION_TYPE.FRONT) {
           this.handleFront();
         } else if (this.direction === DIRECTION_TYPE.BEHIND) {
           this.handleBehind();
         }
-      }, // ----------- public method end -----------
+      },
+
+      // ----------- public method end -----------
     },
     {
       key: 'handleFront',
       value: function handleFront() {
-        var overs = this.getScrollOvers(); // should not change range if start doesn't exceed overs
-
+        var overs = this.getScrollOvers();
+        // should not change range if start doesn't exceed overs
         if (overs > this.range.start) {
           return;
-        } // move up start by a buffer length, and make sure its safety
+        }
 
+        // move up start by a buffer length, and make sure its safety
         var start = Math.max(overs - this.param.buffer, 0);
         this.checkRange(start, this.getEndByStart(start));
       },
@@ -343,39 +347,37 @@ var Virtual = /*#__PURE__*/ (function () {
     {
       key: 'handleBehind',
       value: function handleBehind() {
-        var overs = this.getScrollOvers(); // range should not change if scroll overs within buffer
-
+        var overs = this.getScrollOvers();
+        // range should not change if scroll overs within buffer
         if (overs < this.range.start + this.param.buffer) {
           return;
         }
-
         this.checkRange(overs, this.getEndByStart(overs));
-      }, // return the pass overs according to current scroll offset
+      },
+
+      // return the pass overs according to current scroll offset
     },
     {
       key: 'getScrollOvers',
       value: function getScrollOvers() {
         // if slot header exist, we need subtract its size
         var offset = this.offset - this.param.slotHeaderSize;
-
         if (offset <= 0) {
           return 0;
-        } // if is fixed type, that can be easily
+        }
 
+        // if is fixed type, that can be easily
         if (this.isFixedType()) {
           return Math.floor(offset / this.fixedSizeValue);
         }
-
         var low = 0;
         var middle = 0;
         var middleOffset = 0;
         var high = this.param.uniqueIds.length;
-
         while (low <= high) {
           // this.__bsearchCalls++
           middle = low + Math.floor((high - low) / 2);
           middleOffset = this.getIndexOffset(middle);
-
           if (middleOffset === offset) {
             return middle;
           } else if (middleOffset < offset) {
@@ -384,9 +386,10 @@ var Virtual = /*#__PURE__*/ (function () {
             high = middle - 1;
           }
         }
-
         return low > 0 ? --low : 0;
-      }, // return a scroll offset from given index, can efficiency be improved more here?
+      },
+
+      // return a scroll offset from given index, can efficiency be improved more here?
       // although the call frequency is very high, its only a superposition of numbers
     },
     {
@@ -395,10 +398,8 @@ var Virtual = /*#__PURE__*/ (function () {
         if (!givenIndex) {
           return 0;
         }
-
         var offset = 0;
         var indexSize = 0;
-
         for (var index = 0; index < givenIndex; index++) {
           // this.__getIndexOffsetCalls++
           indexSize = this.sizes.get(this.param.uniqueIds[index]);
@@ -407,32 +408,40 @@ var Virtual = /*#__PURE__*/ (function () {
             (typeof indexSize === 'number'
               ? indexSize
               : this.getEstimateSize());
-        } // remember last calculate index
+        }
 
+        // remember last calculate index
         this.lastCalcIndex = Math.max(this.lastCalcIndex, givenIndex - 1);
         this.lastCalcIndex = Math.min(this.lastCalcIndex, this.getLastIndex());
         return offset;
-      }, // is fixed size type
+      },
+
+      // is fixed size type
     },
     {
       key: 'isFixedType',
       value: function isFixedType() {
         return this.calcType === CALC_TYPE.FIXED;
-      }, // return the real last index
+      },
+
+      // return the real last index
     },
     {
       key: 'getLastIndex',
       value: function getLastIndex() {
         return this.param.uniqueIds.length - 1;
-      }, // in some conditions range is broke, we need correct it
+      },
+
+      // in some conditions range is broke, we need correct it
       // and then decide whether need update to next range
     },
     {
       key: 'checkRange',
       value: function checkRange(start, end) {
         var keeps = this.param.keeps;
-        var total = this.param.uniqueIds.length; // datas less than keeps, render all
+        var total = this.param.uniqueIds.length;
 
+        // datas less than keeps, render all
         if (total <= keeps) {
           start = 0;
           end = this.getLastIndex();
@@ -440,11 +449,12 @@ var Virtual = /*#__PURE__*/ (function () {
           // if range length is less than keeps, corrent it base on end
           start = end - keeps + 1;
         }
-
         if (this.range.start !== start) {
           this.updateRange(start, end);
         }
-      }, // setting to a new range and rerender
+      },
+
+      // setting to a new range and rerender
     },
     {
       key: 'updateRange',
@@ -454,7 +464,9 @@ var Virtual = /*#__PURE__*/ (function () {
         this.range.padFront = this.getPadFront();
         this.range.padBehind = this.getPadBehind();
         this.callUpdate(this.getRange());
-      }, // return end base on start
+      },
+
+      // return end base on start
     },
     {
       key: 'getEndByStart',
@@ -462,7 +474,9 @@ var Virtual = /*#__PURE__*/ (function () {
         var theoryEnd = start + this.param.keeps - 1;
         var truelyEnd = Math.min(theoryEnd, this.getLastIndex());
         return truelyEnd;
-      }, // return total front offset
+      },
+
+      // return total front offset
     },
     {
       key: 'getPadFront',
@@ -472,25 +486,29 @@ var Virtual = /*#__PURE__*/ (function () {
         } else {
           return this.getIndexOffset(this.range.start);
         }
-      }, // return total behind offset
+      },
+
+      // return total behind offset
     },
     {
       key: 'getPadBehind',
       value: function getPadBehind() {
         var end = this.range.end;
         var lastIndex = this.getLastIndex();
-
         if (this.isFixedType()) {
           return (lastIndex - end) * this.fixedSizeValue;
-        } // if it's all calculated, return the exactly offset
+        }
 
+        // if it's all calculated, return the exactly offset
         if (this.lastCalcIndex === lastIndex) {
           return this.getIndexOffset(lastIndex) - this.getIndexOffset(end);
         } else {
           // if not, use a estimated value
           return (lastIndex - end) * this.getEstimateSize();
         }
-      }, // get the item estimate size
+      },
+
+      // get the item estimate size
     },
     {
       key: 'getEstimateSize',
@@ -501,13 +519,13 @@ var Virtual = /*#__PURE__*/ (function () {
       },
     },
   ]);
-
   return Virtual;
 })();
 
 /**
  * props declaration for default, item and slot component
  */
+
 var VirtualProps = {
   dataKey: {
     type: [String, Function],
@@ -663,18 +681,17 @@ var useResizeChange = function useResizeChange(props, rootRef, emit) {
   var shapeKey = computed(function () {
     return props.horizontal ? 'offsetWidth' : 'offsetHeight';
   });
-
   var getCurrentSize = function getCurrentSize() {
     return rootRef.value ? rootRef.value[shapeKey.value] : 0;
-  }; // tell parent current size identify by unqiue key
+  };
 
+  // tell parent current size identify by unqiue key
   var dispatchSizeChange = function dispatchSizeChange() {
     var event = props.event,
       uniqueKey = props.uniqueKey,
       hasInitial = props.hasInitial;
     emit(event, uniqueKey, getCurrentSize(), hasInitial);
   };
-
   onMounted(function () {
     if (typeof ResizeObserver !== 'undefined') {
       resizeObserver = new ResizeObserver(function () {
@@ -693,7 +710,6 @@ var useResizeChange = function useResizeChange(props, rootRef, emit) {
     }
   });
 };
-
 var Item = defineComponent({
   name: 'VirtualListItem',
   props: ItemProps,
@@ -712,7 +728,6 @@ var Item = defineComponent({
         _props$scopedSlots = props.scopedSlots,
         scopedSlots = _props$scopedSlots === void 0 ? {} : _props$scopedSlots,
         uniqueKey = props.uniqueKey;
-
       var mergedProps = _objectSpread2(
         _objectSpread2({}, extraProps),
         {},
@@ -721,7 +736,6 @@ var Item = defineComponent({
           index: index,
         },
       );
-
       return createVNode(
         Tag,
         {
@@ -760,7 +774,6 @@ var Slot = defineComponent({
     useResizeChange(props, rootRef, emit);
     return function () {
       var _slots$default;
-
       var Tag = props.tag,
         uniqueKey = props.uniqueKey;
       return createVNode(
@@ -784,20 +797,16 @@ var Slot = defineComponent({
   },
 });
 
-var EVENT_TYPE;
-
-(function (EVENT_TYPE) {
+var EVENT_TYPE = /*#__PURE__*/ (function (EVENT_TYPE) {
   EVENT_TYPE['ITEM'] = 'itemResize';
   EVENT_TYPE['SLOT'] = 'slotResize';
-})(EVENT_TYPE || (EVENT_TYPE = {}));
-
-var SLOT_TYPE;
-
-(function (SLOT_TYPE) {
+  return EVENT_TYPE;
+})(EVENT_TYPE || {});
+var SLOT_TYPE = /*#__PURE__*/ (function (SLOT_TYPE) {
   SLOT_TYPE['HEADER'] = 'thead';
   SLOT_TYPE['FOOTER'] = 'tfoot';
-})(SLOT_TYPE || (SLOT_TYPE = {}));
-
+  return SLOT_TYPE;
+})(SLOT_TYPE || {});
 var VirtualList = defineComponent({
   name: 'VirtualList',
   props: VirtualProps,
@@ -811,10 +820,10 @@ var VirtualList = defineComponent({
     var root = ref();
     var shepherd = ref(null);
     var virtual;
+
     /**
      * watch
      */
-
     watch(
       function () {
         return props.dataSources.length;
@@ -849,15 +858,14 @@ var VirtualList = defineComponent({
         return scrollToOffset(newValue);
       },
     );
+
     /**
      * methods
      */
     // get item size by id
-
     var getSize = function getSize(id) {
       return virtual.sizes.get(id);
     };
-
     var getOffset = function getOffset() {
       if (props.pageMode) {
         return (
@@ -866,31 +874,27 @@ var VirtualList = defineComponent({
       } else {
         return root.value ? Math.ceil(root.value[directionKey]) : 0;
       }
-    }; // return client viewport size
-
+    };
+    // return client viewport size
     var getClientSize = function getClientSize() {
       var key = isHorizontal ? 'clientWidth' : 'clientHeight';
-
-      if (props.pageMode) {
-        return document.documentElement[key] || document.body[key];
-      } else {
-        return root.value ? Math.ceil(root.value[key]) : 0;
-      }
-    }; // return all scroll size
-
-    var getScrollSize = function getScrollSize() {
-      var key = isHorizontal ? 'scrollWidth' : 'scrollHeight';
-
       if (props.pageMode) {
         return document.documentElement[key] || document.body[key];
       } else {
         return root.value ? Math.ceil(root.value[key]) : 0;
       }
     };
-
+    // return all scroll size
+    var getScrollSize = function getScrollSize() {
+      var key = isHorizontal ? 'scrollWidth' : 'scrollHeight';
+      if (props.pageMode) {
+        return document.documentElement[key] || document.body[key];
+      } else {
+        return root.value ? Math.ceil(root.value[key]) : 0;
+      }
+    };
     var emitEvent = function emitEvent(offset, clientSize, scrollSize, evt) {
       emit('scroll', evt, virtual.getRange());
-
       if (
         virtual.isFront() &&
         !!props.dataSources.length &&
@@ -904,20 +908,18 @@ var VirtualList = defineComponent({
         emit('tobottom');
       }
     };
-
     var onScroll = function onScroll(evt) {
       var offset = getOffset();
       var clientSize = getClientSize();
-      var scrollSize = getScrollSize(); // iOS scroll-spring-back behavior will make direction mistake
+      var scrollSize = getScrollSize();
 
+      // iOS scroll-spring-back behavior will make direction mistake
       if (offset < 0 || offset + clientSize > scrollSize + 1 || !scrollSize) {
         return;
       }
-
       virtual.handleScroll(offset);
       emitEvent(offset, clientSize, scrollSize, evt);
     };
-
     var getUniqueIdFromDataSources = function getUniqueIdFromDataSources() {
       var dataKey = props.dataKey,
         _props$dataSources = props.dataSources,
@@ -928,12 +930,10 @@ var VirtualList = defineComponent({
           : dataSource[dataKey];
       });
     };
-
     var onRangeChanged = function onRangeChanged(newRange) {
       range.value = newRange;
       emit('range-change', range);
     };
-
     var installVirtual = function installVirtual() {
       virtual = new Virtual(
         {
@@ -946,11 +946,12 @@ var VirtualList = defineComponent({
           uniqueIds: getUniqueIdFromDataSources(),
         },
         onRangeChanged,
-      ); // sync initial range
+      );
 
+      // sync initial range
       range.value = virtual.getRange();
-    }; // set current scroll position to a expectant index
-
+    };
+    // set current scroll position to a expectant index
     var scrollToIndex = function scrollToIndex(index) {
       // scroll to bottom
       if (index >= props.dataSources.length - 1) {
@@ -959,8 +960,8 @@ var VirtualList = defineComponent({
         var offset = virtual.getOffset(index);
         scrollToOffset(offset);
       }
-    }; // set current scroll position to a expectant offset
-
+    };
+    // set current scroll position to a expectant offset
     var scrollToOffset = function scrollToOffset(offset) {
       if (props.pageMode) {
         document.body[directionKey] = offset;
@@ -970,10 +971,10 @@ var VirtualList = defineComponent({
           root.value[directionKey] = offset;
         }
       }
-    }; // get the real render slots based on range data
+    };
+    // get the real render slots based on range data
     // in-place patch strategy will try to reuse components as possible
     // so those components that are reused will not trigger lifecycle mounted
-
     var getRenderSlots = function getRenderSlots() {
       var slots = [];
       var _range$value = range.value,
@@ -987,16 +988,13 @@ var VirtualList = defineComponent({
         extraProps = props.extraProps,
         dataComponent = props.dataComponent,
         itemScopedSlots = props.itemScopedSlots;
-
       for (var index = start; index <= end; index++) {
         var dataSource = dataSources[index];
-
         if (dataSource) {
           var uniqueKey =
             typeof dataKey === 'function'
               ? dataKey(dataSource)
               : dataSource[dataKey];
-
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(
               createVNode(
@@ -1037,51 +1035,52 @@ var VirtualList = defineComponent({
           );
         }
       }
-
       return slots;
-    }; // event called when each item mounted or size changed
+    };
 
+    // event called when each item mounted or size changed
     var onItemResized = function onItemResized(id, size) {
       virtual.saveSize(id, size);
       emit('resized', id, size);
     };
-
     var virtualSaveSize = function virtualSaveSize(id, size) {
       virtual.saveSize(id, size);
     };
-
     var virtualGetOffset = function virtualGetOffset(index) {
       return virtual.getOffset(index);
-    }; // event called when slot mounted or size changed
+    };
 
+    // event called when slot mounted or size changed
     var onSlotResized = function onSlotResized(type, size, hasInit) {
       if (type === SLOT_TYPE.HEADER) {
         virtual.updateParam('slotHeaderSize', size);
       } else if (type === SLOT_TYPE.FOOTER) {
         virtual.updateParam('slotFooterSize', size);
       }
-
       if (hasInit) {
         virtual.handleSlotSizeChange();
       }
-    }; // set current scroll position to bottom
+    };
 
+    // set current scroll position to bottom
     var scrollToBottom = function scrollToBottom() {
       if (shepherd.value) {
         var offset = shepherd.value[isHorizontal ? 'offsetLeft' : 'offsetTop'];
-        scrollToOffset(offset); // check if it's really scrolled to the bottom
+        scrollToOffset(offset);
+
+        // check if it's really scrolled to the bottom
         // maybe list doesn't render and calculate to last range
         // so we need retry in next event loop until it really at bottom
-
         setTimeout(function () {
           if (getOffset() + getClientSize() < getScrollSize()) {
             scrollToBottom();
           }
         }, 3);
       }
-    }; // when using page mode we need update slot header size manually
-    // taking root offset relative to the browser as slot header size
+    };
 
+    // when using page mode we need update slot header size manually
+    // taking root offset relative to the browser as slot header size
     var updatePageModeFront = function updatePageModeFront() {
       if (root.value) {
         var rect = root.value.getBoundingClientRect();
@@ -1091,17 +1090,19 @@ var VirtualList = defineComponent({
           : rect.top + defaultView.pageYOffset;
         virtual.updateParam('slotHeaderSize', offsetFront);
       }
-    }; // get the total number of stored (rendered) items
+    };
 
+    // get the total number of stored (rendered) items
     var getSizes = function getSizes() {
       return virtual.sizes.size;
     };
+
     /**
      * life cycles
      */
+    installVirtual();
 
-    installVirtual(); // set back offset when awake from keep-alive
-
+    // set back offset when awake from keep-alive
     onActivated(function () {
       scrollToOffset(virtual.offset);
     });
@@ -1111,8 +1112,9 @@ var VirtualList = defineComponent({
         scrollToIndex(props.start);
       } else if (props.offset) {
         scrollToOffset(props.offset);
-      } // in page mode we bind scroll event to document
+      }
 
+      // in page mode we bind scroll event to document
       if (props.pageMode) {
         updatePageModeFront();
         document.addEventListener('scroll', onScroll, {
@@ -1122,15 +1124,14 @@ var VirtualList = defineComponent({
     });
     onUnmounted(function () {
       virtual.destroy();
-
       if (props.pageMode) {
         document.removeEventListener('scroll', onScroll);
       }
     });
+
     /**
      * public methods
      */
-
     expose({
       scrollToBottom: scrollToBottom,
       getSizes: getSizes,
